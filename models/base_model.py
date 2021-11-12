@@ -4,6 +4,9 @@ from uuid import uuid4
 """
 Module BaseModel
 """
+# fdate = date format
+fdate = "%Y-%m-%dT%H:%M:%S.%f"
+
 
 class BaseModel():
     """
@@ -11,14 +14,27 @@ class BaseModel():
     for other classes.
     """
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """
         This method allow the class to initialize the attributes id,
         created_at and updated_at.
         """
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if kwargs:
+            for key, val in kwargs.items():
+                if key != '__class__':
+                    setattr(self, key, val)
+                    if hasattr(self, 'created_at') and type(
+                            self.created_at) is str:
+                        self.created_at = datetime.strptime(
+                            kwargs["created_at"], fdate)
+                    if hasattr(self, 'updated_at') and type(
+                            self.updated_at) is str:
+                        self.updated_at = datetime.strptime(
+                            kwargs["updated_at"], fdate)
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = self.created_at
 
     def __str__(self):
         """
@@ -37,11 +53,10 @@ class BaseModel():
 
     def to_dict(self):
         """
-        Returns a dictionary containing all keys/values 
+        Returns a dictionary containing all keys/values
         of __dict__ of the instance
         """
-        dic = {}
-        dic = self.__dict__
+        dic = self.__dict__.copy()
         dic['__class__'] = self.__class__.__name__
         dic['created_at'] = self.created_at.isoformat()
         dic['updated_at'] = self.updated_at.isoformat()
