@@ -4,6 +4,7 @@ Program console.py
 """
 import cmd
 
+
 class HBNBCommand(cmd.Cmd):
     """
     HBNBCommand contains the entry point of the command interpreter.
@@ -24,6 +25,7 @@ class HBNBCommand(cmd.Cmd):
         An empty line + ENTER don't execute anything.
         """
         pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
