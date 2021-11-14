@@ -83,6 +83,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
                 return
             del obje[key]
+            storage.save()
         else:
             print('** class name missing **')
 
@@ -133,8 +134,9 @@ class HBNBCommand(cmd.Cmd):
             if len(args) < 4:
                 print("** value missing **")
                 return
-            setattr(objs[key], args[2].replace('"', ''), eval(args[3]))
-            objs[key].save()
+            if args[2] not in ['id', 'created_at', 'updated_at']:
+                setattr(objs[key], args[2].replace('"', ''), eval(args[3]))
+                objs[key].save()
         else:
             print("** class name missing **")
 
