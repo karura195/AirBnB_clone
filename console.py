@@ -83,6 +83,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
                 return
             del obje[key]
+            storage.save()
         else:
             print('** class name missing **')
 
