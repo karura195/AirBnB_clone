@@ -5,7 +5,6 @@ import models
 """
 Module BaseModel
 """
-# fdate = date format
 fdate = "%Y-%m-%dT%H:%M:%S.%f"
 
 
