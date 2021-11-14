@@ -133,7 +133,7 @@ class HBNBCommand(cmd.Cmd):
             if len(args) < 4:
                 print("** value missing **")
                 return
-            objs[key].__dict__[args[2]] = args[3]
+            objs[key].__dict__[args[2]] = eval(args[3])
             objs[key].save
         else:
             print("** class name missing **")
