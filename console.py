@@ -152,16 +152,17 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, line):
         "count instances of the class"
 
-        cmd_line = line.split()
+        args = line.split(" ")
 
-        if cmd_line[0] not in allowed_class:
+        if args[0] not in self.classes:
             return
         else:
             count = 0
-            keys_list = storage.all().keys()
-            for search in keys_list:
-                lsearch = len(cmd_line[0])
-                if search[:lsearch] == cmd_line[0]:
+            key = args[0] + "." + args[1]
+            obje = storage.all()
+            for key in obje:
+                search = len(args[0])
+                if key[:search] == args[0]:
                     count += 1
             print(count)
 
