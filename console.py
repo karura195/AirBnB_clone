@@ -14,8 +14,8 @@ from models.review import Review
 from models.user import User
 
 
-classes = {BaseModel, User, State, City,
-           Amenity, Place, Review}
+classes = {"BaseModel", "User", "State", "City",
+           "Amenity", "Place", "Review"}
 
 
 class HBNBCommand(cmd.Cmd):
