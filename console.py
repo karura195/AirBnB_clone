@@ -14,15 +14,14 @@ from models.review import Review
 from models.user import User
 
 
-classes = {"BaseModel": BaseModel, "User": User, "State": State, "City": City,
-           "Amenity": Amenity, "Place": Place, "Review": Review}
-
 
 class HBNBCommand(cmd.Cmd):
     """
     HBNBCommand contains the entry point of the command interpreter.
     """
     prompt = '(hbnb)'
+    classes = {"BaseModel", "User", "State", "City",
+           "Amenity", "Place", "Review"}
 
     def do_EOF(self, line):
         "EOF command to exit the program"
@@ -149,6 +148,23 @@ class HBNBCommand(cmd.Cmd):
                 objs[key].save()
         else:
             print("** class name missing **")
+
+    def do_count(self, line):
+        "count instances of the class"
+
+        args = line.split(" ")
+
+        if args[0] not in self.classes:
+            return
+        else:
+            count = 0
+            key = args[0] + "." + args[1]
+            obje = storage.all()
+            for key in obje:
+                search = len(args[0])
+                if key[:search] == args[0]:
+                    count += 1
+            print(count)
 
 
 if __name__ == '__main__':
