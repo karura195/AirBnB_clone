@@ -3,6 +3,7 @@
 Program console.py
 """
 import cmd
+import re
 from models.base_model import BaseModel
 from models import storage
 from datetime import datetime
@@ -147,6 +148,15 @@ class HBNBCommand(cmd.Cmd):
                 objs[key].save()
         else:
             print("** class name missing **")
+
+    def precmd(self, line):
+        args = line.split(".")
+        if len(args) == 2:
+            if args[0] in self.classes:
+                match = re.search(r'all\(.*\)', args[1])
+                if match:
+                    return "all " + args[0]
+        return line
 
     def do_count(self, line):
         "count instances of the class"
