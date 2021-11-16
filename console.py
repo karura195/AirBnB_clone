@@ -165,11 +165,8 @@ class HBNBCommand(cmd.Cmd):
                     args_cmd = args_id[1].replace(')', '').split(', ')
                     id = args_cmd[0]
                     if id:
-                        key = args[0] + '.' + id
-                        objs = storage.all()
-                        if key in objs:
-                            my_list = [args_id[0], args[0]] + args_cmd
-                            return " ".join(my_list)
+                        my_list = [args_id[0], args[0]] + args_cmd
+                        return " ".join(my_list)
                     else:
                         return args_id[0] + ' ' + args[0]
         return line
