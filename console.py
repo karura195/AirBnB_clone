@@ -150,12 +150,26 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def precmd(self, line):
+        """
+        Hook method executed just before the command line
+        line is interpreted, but after the input
+        prompt is generated and issued.
+        """
         args = line.split(".")
         if len(args) == 2:
             if args[0] in self.classes:
-                match = re.search(r'all\(.*\)', args[1])
+                match = re.search(r'(all|show|count|destroy|update)\(.*\)',
+                                  args[1])
                 if match:
-                    return "all " + args[0]
+                    args_id = args[1].split('(')
+                    id = args_id[1].replace(')', '')
+                    if id:
+                        key = args[0] + '.' + id
+                        objs = storage.all()
+                        if key in objs:
+                            return args_id[0] + ' ' + args[0] + ' ' + id
+                    else:
+                        return args_id[0] + ' ' + args[0]
         return line
 
     def do_count(self, line):
