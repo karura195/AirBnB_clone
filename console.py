@@ -161,11 +161,22 @@ class HBNBCommand(cmd.Cmd):
                 match = re.search(r'(all|show|count|destroy|update)\(.*\)',
                                   args[1])
                 if match:
-                    args_id = args[1].split('(')
+                    args_id = re.split(r'\(|\{', args[1])
                     args_cmd = args_id[1].replace(')', '').split(', ')
                     id = args_cmd[0]
                     if id:
-                        my_list = [args_id[0], args[0]] + args_cmd
+                        my_list = [args_id[0], args[0]]
+                        if len(args_id) > 2:
+                            my_dict = eval('{' + args_id[2].replace(')',''))
+                            for key, value in my_dict.items():
+                                def_list = []
+                                if isinstance(value, str):
+                                    value = '"' + value + '"'
+                                def_list = [args[0]] + [id] + [key, str(value)]
+                                self.do_update(" ".join(def_list))
+                            return cmd.Cmd.precmd(self, "")
+                        else:
+                            my_list += args_cmd
                         return " ".join(my_list)
                     else:
                         return args_id[0] + ' ' + args[0]
