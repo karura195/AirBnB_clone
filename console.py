@@ -3,6 +3,7 @@
 Program console.py
 """
 import cmd
+import re
 from models.base_model import BaseModel
 from models import storage
 from datetime import datetime
@@ -147,6 +148,39 @@ class HBNBCommand(cmd.Cmd):
                 objs[key].save()
         else:
             print("** class name missing **")
+
+    def precmd(self, line):
+        """
+        Hook method executed just before the command line
+        line is interpreted, but after the input
+        prompt is generated and issued.
+        """
+        args = line.split(".")
+        if len(args) == 2:
+            if args[0] in self.classes:
+                match = re.search(r'(all|show|count|destroy|update)\(.*\)',
+                                  args[1])
+                if match:
+                    args_id = re.split(r'\(|\{', args[1])
+                    args_cmd = args_id[1].replace(')', '').split(', ')
+                    id = args_cmd[0]
+                    if id:
+                        my_list = [args_id[0], args[0]]
+                        if len(args_id) > 2:
+                            my_dict = eval('{' + args_id[2].replace(')',''))
+                            for key, value in my_dict.items():
+                                def_list = []
+                                if isinstance(value, str):
+                                    value = '"' + value + '"'
+                                def_list = [args[0]] + [id] + [key, str(value)]
+                                self.do_update(" ".join(def_list))
+                            return cmd.Cmd.precmd(self, "")
+                        else:
+                            my_list += args_cmd
+                        return " ".join(my_list)
+                    else:
+                        return args_id[0] + ' ' + args[0]
+        return line
 
     def do_count(self, line):
         "count instances of the class"
